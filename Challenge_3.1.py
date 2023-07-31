@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import plotly.express as px
 
+
 # List of filenames to read
 file_names = [
     '20200120.parquet',  # Jan 20, 2020
@@ -128,13 +129,13 @@ for i, df in enumerate(new_dataframes):
     # Extra processing step for the Cabinet Time Series Plot, adds input power and averages temps across all nodes in each cabinet
     df_cabinets = df.groupby(['timestamp', 'cabinet']).agg({'input_power': 'sum', 'node_temp_mean': 'mean'}).reset_index()
 
-    # Create the Cabinet Time Series plot
+    # Create the Cabinet Time Series plot. Extra processing step above changes 'node_temp_mean' to 'Cabinet Average Temp'
     cabinet_time_series_fig = px.scatter(df_cabinets, x="input_power", y="node_temp_mean", animation_frame="timestamp",
                                          animation_group="cabinet", color="cabinet", hover_name="cabinet",
                                          range_x=[0, 45000], range_y=[0, 50],   # May need to adjust ranges depending on data
                                          labels={
                                              "input_power": "Input Power",
-                                             "node_temp_mean": "Cabinet Average Temp",
+                                             "node_temp_mean": "Cabinet Average Temp",  # node_temp_mean equivalent to Cabinet Average Temp now
                                              "cabinet": "Cabinet",
                                              "timestamp": "Timestamp"
                                          },
