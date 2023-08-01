@@ -52,5 +52,5 @@ Please be aware that processing an incorrect number of Parquet files simultaneou
 For any inquiries or issues related to this project, feel free to contact the repository owner or author.
 
 ---
-Author: Joseph Caldwell
+Author: Joseph Caldwell  
 Date: 8/1/23
