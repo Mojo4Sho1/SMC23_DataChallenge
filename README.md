@@ -4,6 +4,17 @@ This data challenge involves analyzing telemetry data from the SUMMIT supercompu
 ## Data
 The telemetry data is stored in Parquet files. Unfortunately, due to their large size, the Parquet files are not included in this GitHub repository. However, you can obtain the necessary Parquet files from the SUMMIT supercomputer data repository. By modifying the `file_names` list in the scripts, you can analyze other Parquet files associated with the SUMMIT telemetry.
 
+## Requirements
+Besides the neccesary Parquet files, you will need the following Python libraries:
+- pyarrow
+- numpy 
+- pandas
+- plotly
+
+Prepare your telemetry data in Parquet format. Please ensure that the Parquet files are compatible with the expected data structure for the programs to work correctly.
+
+Place your Parquet files in the same directory as the Python programs. If your files are too large to be uploaded to GitHub, make sure they are available locally.
+
 ## Program 1: Challenge_3.1.py
 The script `Challenge_3.1.py` processes the telemetry data and generates interactive HTML visualizations. It performs the following steps for each file in the `file_names` list:
 - Creates DataFrames from the Parquet files and removes duplicate rows.
@@ -12,8 +23,20 @@ The script `Challenge_3.1.py` processes the telemetry data and generates interac
 - Creates Node Scatter, Node Time Series, and Cabinet Time Series plots for each date.
 - Exports the plots as interactive HTML files.
 
+
 ## Program 2: Challenge_3.2.py
-The script `Challenge_3.2.py` is designed to perform a more nuanced analysis of the telemetry data. It processes the data for the five specified dates simultaneously and generates five subplots for each type of chart. The visualizations include Power Consumption, Power Magnitude, Power Gradient, Power Spectrum, and Power Spectral Density (PSD) comparisons. These subplots provide a comparative view of the system's power behavior across the five selected dates.
+The script `Challenge_3.2.py` focuses on comparative analysis of power data from five Parquet files related to the SUMMIT supercomputer. It performs the following steps for each file in the `file_names` list:
+- Creates DataFrames from the Parquet files and drops duplicate rows.
+- Averages power values with the same hostname and timestamp.
+- Calculates the input power and creates a new column for cabinet names.
+- Groups the data by timestamp and cabinet, then aggregates input power for the entire system.
+- Calculates power fluctuations, power magnitudes, and power gradients using numpy and pandas.
+- Applies Fast Fourier Transform (FFT) to power fluctuations to compute the Power Spectrum and Power Spectral Density (PSD).
+- Generates five sets of visualizations, each consisting of five subplots for Power Consumption, Power Magnitude, Power Gradient, Power Spectrum, and PSD charts, respectively.
+- Customizes the visualizations with coordinated colors and tick values for easy comparison.
+- Writes the visualizations to separate HTML files for interactive exploration.
+
+The comparative analysis enabled by Challenge_3.2 allows users to gain valuable insights into the power dynamics and fluctuations of the SUMMIT system on five different dates, making it easier to identify patterns and trends across multiple datasets. 
 
 ## Instructions
 To use the scripts, follow these steps:
@@ -31,55 +54,3 @@ For any inquiries or issues related to this project, feel free to contact the re
 ---
 Author: Joseph Caldwell
 Date: 8/1/23
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-This repository contains Python programs to process and visualize telemetry data from the SUMMIT supercomputer. The data is stored in Parquet format, but it is not included in this repository due to its large size. However, you can easily analyze your own telemetry data by following the instructions below.
-
-Background
-SUMMIT is one of the world's most powerful supercomputers, located at the Oak Ridge National Laboratory in the United States. It is designed for high-performance computing (HPC) and scientific research applications. SUMMIT's massive processing capabilities generate a vast amount of telemetry data, capturing critical information about power consumption and temperature variations within the system.
-
-The challenge presented by this data is to understand and manage the dynamic nature of power consumption in an HPC environment like SUMMIT. By analyzing and visualizing the telemetry data, researchers and administrators can make informed decisions to optimize the system's efficiency and performance.
-
-Requirements
-To run the Python programs, you will need the following libraries:
-
-pyarrow
-numpy
-pandas
-plotly
-You can install these libraries using pip
-
-
-Prepare your telemetry data in Parquet format. Please ensure that the Parquet files are compatible with the expected data structure for the programs to work correctly.
-
-Place your Parquet files in the same directory as the Python programs. If your files are too large to be uploaded to GitHub, make sure they are available locally.
-
-Analyzing Telemetry Data
-Challenge_3.1: Data Processing and Visualization
-The program1.py script processes the telemetry data and generates interactive visualizations of power consumption and temperature fluctuations for specific dates.
-
-To use program1.py, open the script in your preferred Python environment, and modify the file_names list with the names of the Parquet files you want to analyze. You can add or remove file names to process as many files as you like.
-
-Once you have updated the file_names, run the script. The program will process the data and create interactive HTML files for each date specified. These files will contain visualizations of power consumption and temperature fluctuations for individual nodes and cabinets.
