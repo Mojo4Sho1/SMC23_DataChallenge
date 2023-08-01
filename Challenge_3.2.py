@@ -23,7 +23,7 @@ positive_frequencies_scaled = []
 # Processing steps for each file
 for file_name in file_names:
     df = pq.read_table(file_name).to_pandas().drop_duplicates()     # Create dataframe and drop duplicates
-    df = df.groupby(['timestamp', 'hostname']).agg({                # Average values with same hostname and timestamp
+    df = df.groupby(['timestamp', 'hostname']).agg({                # Average power values with same hostname and timestamp
         'ps0_input_power': 'mean', 'ps1_input_power': 'mean'
     }).reset_index()
     
@@ -49,15 +49,13 @@ for file_name in file_names:
     
     # Apply FFT to power fluctuations to compute the Power Spectrum
     spectrum = np.fft.fft(power_fluctuations)
-    spectrum_real = np.real(spectrum)                   #takes only real part of spectrum data
-    power_spectrum = np.abs(spectrum_real) ** 2         #takes absolute values and squares them to obtain power spectrum
-    positive_spectrum = spectrum_real[1:len(spectrum) // 2]
+    spectrum_real = np.real(spectrum)                   # Take real part of spectrum data
+    power_spectrum = np.abs(spectrum_real) ** 2         # Take absolute values and squares them to obtain power spectrum
     power_spectrum_magnitudes.append(power_spectrum)
     
     # Compute the Power Spectral Density (PSD)
     sampling_rate = 1 / 60  # 1 minute = 1/60 hour
-    frequency = np.fft.fftfreq(len(power_fluctuations), d=sampling_rate)
-    positive_frequencies = frequency[1:len(power_fluctuations) // 2]    # Exclude the first element (DC component) and the negative frequencies
+    positive_spectrum = spectrum_real[1:len(spectrum) // 2] # Exclude the first element (DC component) and the negative frequencies
     psd = positive_spectrum / (len(power_fluctuations) * sampling_rate)
     power_psd.append(psd)
 
@@ -85,11 +83,11 @@ fig_power_psd = make_subplots(rows=1, cols=5, shared_yaxes=True,
 # Create a list of colors for each day
 colors = ['green', 'blue', 'purple', 'orange', 'red']
 
-# Define tick values and labels for Power Consumption chart
+# Define tick values and labels for Power Consumption, Power Magnitude, and Power Gradient Charts
 tick_values_power_consumption = [360, 720, 1080]
 tick_labels_power_consumption = ['6', '12', '18']
 
-# Define tick values and labels for other charts
+# Define tick values and labels for Power Spectrum and Power Spectral Density (PSD) Charts
 tick_values_other_charts = [180, 360, 540]
 tick_labels_other_charts = ['180', '360', '540']
 
